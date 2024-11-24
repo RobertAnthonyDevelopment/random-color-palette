@@ -1,4 +1,4 @@
-# Free Color Palette
+# Random Color Palette
 
 A simple web application to generate random color palettes, allowing users to copy hex codes for use in design or development projects.
 
