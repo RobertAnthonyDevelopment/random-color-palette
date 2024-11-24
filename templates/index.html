@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Palette Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .color-box {
+            width: 100px;
+            height: 100px;
+            display: inline-block;
+            margin: 10px;
+            line-height: 100px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+            cursor: pointer;
+        }
+        .instructions {
+            color: gray;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        async function fetchPalette() {
+            const response = await fetch('/generate_palette');
+            const colors = await response.json();
+            const container = document.getElementById('palette-container');
+            container.innerHTML = '';
+            colors.forEach(color => {
+                const box = document.createElement('div');
+                box.className = 'color-box';
+                box.style.backgroundColor = color;
+                box.textContent = color;
+                box.onclick = () => {
+                    navigator.clipboard.writeText(color);
+                    alert(`Copied ${color} to clipboard!`);
+                };
+                container.appendChild(box);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchPalette);
+    </script>
+</head>
+<body>
+    <h1>Random Color Palette</h1>
+    <div id="palette-container"></div>
+    <button onclick="fetchPalette()">Generate Palette</button>
+    <p class="instructions">Click on a color to copy its hex code!</p>
+</body>
+</html>
