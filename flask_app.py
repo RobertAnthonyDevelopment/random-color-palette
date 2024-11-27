@@ -1,27 +1,20 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, jsonify, render_template
 import random
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="static", template_folder="templates")
 
-# Function to generate a random color palette
-def generate_palette():
-    palette = []
-    for _ in range(5):
-        color = "#{:02x}{:02x}{:02x}".format(
-            random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)
-        )
-        palette.append(color)
-    return palette
+# Function to generate random hex colors
+def generate_random_color():
+    return "#{:06x}".format(random.randint(0, 0xFFFFFF))
 
-# Routes
-@app.route("/")
+@app.route('/')
 def index():
-    return render_template("index.html")
+    return render_template('index.html')
 
-@app.route("/generate_palette")
-def palette():
-    colors = generate_palette()
+@app.route('/generate_palette', methods=['GET'])
+def generate_palette():
+    colors = [generate_random_color() for _ in range(5)]
     return jsonify(colors)
 
-if __name__ == "__main__":
-    app.run()
+if __name__ == '__main__':
+    app.run(debug=True)
