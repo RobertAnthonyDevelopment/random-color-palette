@@ -1,20 +1,28 @@
-from flask import Flask, jsonify, render_template
-import random
+from flask import Flask, jsonify, render_template, request
 
-app = Flask(__name__, static_folder="static", template_folder="templates")
+app = Flask(__name__)
 
-# Function to generate random hex colors
-def generate_random_color():
-    return "#{:06x}".format(random.randint(0, 0xFFFFFF))
+# Initial default color palette
+default_colors = ["#638b7f", "#033033", "#a31894", "#e40885", "#0954d6"]
 
-@app.route('/')
+@app.route("/")
 def index():
-    return render_template('index.html')
+    return render_template("index.html")
 
-@app.route('/generate_palette', methods=['GET'])
-def generate_palette():
-    colors = [generate_random_color() for _ in range(5)]
-    return jsonify(colors)
+@app.route("/api/get_palette", methods=["GET"])
+def get_palette():
+    # Returns the current color palette
+    return jsonify(default_colors)
 
-if __name__ == '__main__':
+@app.route("/api/save_palette", methods=["POST"])
+def save_palette():
+    data = request.get_json()
+    if not data or "colors" not in data:
+        return jsonify({"error": "Invalid request"}), 400
+    # Update the palette
+    global default_colors
+    default_colors = data["colors"]
+    return jsonify({"message": "Palette updated successfully"})
+
+if __name__ == "__main__":
     app.run(debug=True)
