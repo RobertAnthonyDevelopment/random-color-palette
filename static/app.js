@@ -1,45 +1,41 @@
 document.addEventListener("DOMContentLoaded", () => {
     const paletteContainer = document.getElementById("palette-container");
     const generatePaletteBtn = document.getElementById("generate-palette");
+    const downloadPaletteBtn = document.getElementById("download-palette");
+    const generateGradientBtn = document.getElementById("generate-gradient");
+    const downloadGradientBtn = document.getElementById("download-gradient");
+    const gradientPreview = document.getElementById("gradient-preview");
+    const gradientCanvas = document.getElementById("gradient-canvas");
     const addColorBtn = document.getElementById("add-color");
     const newColorInput = document.getElementById("new-color-hex");
-    const accessibilityCheckBtn = document.getElementById("accessibility-check");
-    const accessibilityResults = document.getElementById("accessibility-results");
 
     let colors = [];
 
-    function fetchPalette() {
-        fetch("/api/get_palette")
-            .then((response) => response.json())
-            .then((data) => {
-                colors = data;
-                renderPalette();
-            })
-            .catch((error) => console.error("Error fetching palette:", error));
-    }
-
-    function savePalette() {
-        fetch("/api/save_palette", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ colors }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data.message);
-            })
-            .catch((error) => console.error("Error saving palette:", error));
-    }
-
     function renderPalette() {
-        paletteContainer.innerHTML = "";
+        paletteContainer.innerHTML = ""; // Clear existing palette
         colors.forEach((color, index) => {
             const colorBox = document.createElement("div");
             colorBox.classList.add("color-box");
             colorBox.style.backgroundColor = color;
-            colorBox.innerText = color;
             colorBox.title = `Click to edit ${color}`;
+
+            const colorCode = document.createElement("p");
+            colorCode.textContent = color;
+            colorCode.style.margin = "5px 0";
+
+            const copyBtn = document.createElement("button");
+            copyBtn.textContent = "Copy";
+            copyBtn.classList.add("copy-button");
+
+            copyBtn.addEventListener("click", (event) => {
+                event.stopPropagation();
+                copyToClipboard(color);
+            });
+
             colorBox.addEventListener("click", () => editColor(index));
+
+            colorBox.appendChild(colorCode);
+            colorBox.appendChild(copyBtn);
             paletteContainer.appendChild(colorBox);
         });
     }
@@ -49,7 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0")}`;
         });
         renderPalette();
-        savePalette();
     }
 
     function editColor(index) {
@@ -57,7 +52,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (newHex && /^#[0-9A-Fa-f]{6}$/.test(newHex)) {
             colors[index] = newHex;
             renderPalette();
-            savePalette();
         } else if (newHex) {
             alert("Invalid hex code. Please try again.");
         }
@@ -68,51 +62,73 @@ document.addEventListener("DOMContentLoaded", () => {
         if (newHex && /^#[0-9A-Fa-f]{6}$/.test(newHex)) {
             colors.push(newHex);
             renderPalette();
-            savePalette();
-            newColorInput.value = "";
+            newColorInput.value = ""; // Clear input
         } else {
             alert("Invalid hex code. Please try again.");
         }
     }
 
-    function runAccessibilityCheck() {
-        let violations = 0;
-        colors.forEach((color) => {
-            const contrast = calculateContrast(color, "#ffffff");
-            if (contrast < 4.5) {
-                violations++;
-            }
+    function downloadPaletteImage() {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const boxSize = 100;
+
+        canvas.width = colors.length * boxSize;
+        canvas.height = boxSize;
+
+        colors.forEach((color, index) => {
+            ctx.fillStyle = color;
+            ctx.fillRect(index * boxSize, 0, boxSize, boxSize);
         });
-        accessibilityResults.innerText = `Violations Found: ${violations}`;
+
+        const link = document.createElement("a");
+        link.download = "palette.png";
+        link.href = canvas.toDataURL();
+        link.click();
     }
 
-    function calculateContrast(fgColor, bgColor) {
-        const fgRgb = hexToRgb(fgColor);
-        const bgRgb = hexToRgb(bgColor);
-        const fgLuminance = calculateLuminance(fgRgb);
-        const bgLuminance = calculateLuminance(bgRgb);
-        const ratio = fgLuminance > bgLuminance
-            ? (fgLuminance + 0.05) / (bgLuminance + 0.05)
-            : (bgLuminance + 0.05) / (fgLuminance + 0.05);
-        return ratio;
-    }
+    function generateGradient() {
+        if (colors.length < 2) {
+            alert("You need at least 2 colors to generate a gradient.");
+            return;
+        }
+        gradientPreview.classList.remove("hidden");
+        gradientCanvas.width = 800;
+        gradientCanvas.height = 100;
 
-    function hexToRgb(hex) {
-        const bigint = parseInt(hex.slice(1), 16);
-        return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
-    }
+        const ctx = gradientCanvas.getContext("2d");
+        const gradient = ctx.createLinearGradient(0, 0, gradientCanvas.width, 0);
 
-    function calculateLuminance(rgb) {
-        const [r, g, b] = rgb.map((v) => {
-            v /= 255;
-            return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+        colors.forEach((color, index) => {
+            gradient.addColorStop(index / (colors.length - 1), color);
         });
-        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, gradientCanvas.width, gradientCanvas.height);
+
+        downloadGradientBtn.classList.remove("hidden");
+    }
+
+    function downloadGradientImage() {
+        const link = document.createElement("a");
+        link.download = "gradient.png";
+        link.href = gradientCanvas.toDataURL();
+        link.click();
+    }
+
+    function copyToClipboard(color) {
+        navigator.clipboard.writeText(color).then(() => {
+            alert(`Copied ${color} to clipboard!`);
+        }).catch(err => {
+            console.error("Failed to copy text: ", err);
+        });
     }
 
     generatePaletteBtn.addEventListener("click", generatePalette);
+    downloadPaletteBtn.addEventListener("click", downloadPaletteImage);
+    generateGradientBtn.addEventListener("click", generateGradient);
+    downloadGradientBtn.addEventListener("click", downloadGradientImage);
     addColorBtn.addEventListener("click", addColor);
-    accessibilityCheckBtn.addEventListener("click", runAccessibilityCheck);
 
-    fetchPalette();
+    generatePalette(); // Initial render
 });
