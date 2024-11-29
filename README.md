@@ -1,6 +1,6 @@
 # Random Color Palette
 
-A simple web application to generate random color palettes, allowing users to copy hex codes for use in design or development projects.
+A simple web application to generate random color palettes and gradients, allowing users to copy hex codes and download their color palletes for use in design or development projects.
 
 ## Features
 
