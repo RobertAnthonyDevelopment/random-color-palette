@@ -3,27 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A color palette generator with editing and accessibility features">
-    <title>Color Palette Generator</title>
+    <meta name="description" content="A color palette generator with editing and sharing features">
+    <title>Enhanced Color Palette Generator</title>
     <link rel="stylesheet" href="static/styles.css">
 </head>
 <body>
     <header>
-        <h1 id="main-title">Random Color Palette</h1>
+        <h1 id="main-title">Enhanced Color Palette</h1>
     </header>
     <main>
         <div id="palette-container" aria-live="polite" aria-label="Generated Color Palette"></div>
-        <button id="generate-palette" aria-label="Generate New Color Palette">Generate Palette</button>
-        <p class="instructions">Click on a color to edit it. Enter new colors below to add to the palette!</p>
+        <button id="generate-palette" aria-label="Generate New Color Palette">Generate Random Palette</button>
+        <div class="controls">
+            <button id="download-palette" aria-label="Download Palette Image">Download Palette as Image</button>
+            <button id="generate-gradient" aria-label="Generate Gradient">Generate Gradient</button>
+            <button id="download-gradient" class="hidden" aria-label="Download Gradient Image">Download Gradient as Image</button>
+        </div>
+        <p class="instructions">Drag and drop colors to reorder. Click on a color to edit it, or use the buttons to save or download your palette.</p>
         <div id="color-controls">
             <input type="text" id="new-color-hex" placeholder="Enter Hex Code (e.g., #ffffff)" aria-label="Enter Hex Code">
             <button id="add-color" aria-label="Add New Color">Add Color</button>
         </div>
+        <div id="gradient-preview" class="hidden">
+            <h2>Generated Gradient</h2>
+            <canvas id="gradient-canvas"></canvas>
+        </div>
     </main>
-    <footer>
-        <button id="accessibility-check" aria-label="Run Accessibility Checker">Run Accessibility Check</button>
-        <div id="accessibility-results" aria-live="polite"></div>
-    </footer>
+    <footer></footer>
     <script src="static/app.js"></script>
 </body>
 </html>
