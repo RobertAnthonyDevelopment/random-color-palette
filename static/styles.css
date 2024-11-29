@@ -36,33 +36,44 @@ header h1 {
     cursor: pointer;
     border-radius: 8px;
     transition: transform 0.3s ease;
+    border: 2px solid #222;
 }
 
-/* Hover effect for color boxes */
 .color-box:hover {
     transform: scale(1.1);
 }
 
-/* Button styling */
-button {
+/* Controls styling */
+#color-controls {
+    margin-top: 20px;
+}
+
+#color-controls input {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+    width: 200px;
+}
+
+#color-controls button {
     padding: 10px 20px;
     font-size: 1rem;
-    background-color: #007BFF;
+    background-color: #28a745;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
-button:hover {
-    background-color: #0056b3;
+#color-controls button:hover {
+    background-color: #218838;
 }
 
-/* Instructions styling */
-.instructions {
-    color: gray;
+/* Accessibility results styling */
+#accessibility-results {
     font-size: 0.9rem;
     margin-top: 20px;
+    color: #333;
 }
-
