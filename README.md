@@ -1,4 +1,4 @@
-# Random Color Palette
+# Random Color Palette Generator
 
 A simple web application to generate random color palettes and gradients, allowing users to copy hex codes and download their color palletes for use in design or development projects.
 
@@ -38,7 +38,7 @@ A simple web application to generate random color palettes and gradients, allowi
 ## Live Demo
 
 Check out the live version of the application here:  
-[Free Color Palette Web App](https://randomcolorpalette-robertanthonydev.pythonanywhere.com/)
+[Random Color Palette Generator](https://randomcolorpalette-robertanthonydev.pythonanywhere.com/)
 
 ## How to Use
 
