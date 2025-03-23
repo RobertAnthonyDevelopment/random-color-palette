@@ -1,35 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A color palette generator with editing and sharing features">
-    <title>Enhanced Color Palette Generator</title>
-    <link rel="stylesheet" href="static/styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Professional Color Palette Generator" />
+  <title>Color Palette Generator</title>
+  <link rel="stylesheet" href="static/styles.css" />
 </head>
 <body>
-    <header>
-        <h1 id="main-title">Enhanced Color Palette</h1>
-    </header>
-    <main>
-        <div id="palette-container" aria-live="polite" aria-label="Generated Color Palette"></div>
-        <button id="generate-palette" aria-label="Generate New Color Palette">Generate Random Palette</button>
-        <div class="controls">
-            <button id="download-palette" aria-label="Download Palette Image">Download Palette as Image</button>
-            <button id="generate-gradient" aria-label="Generate Gradient">Generate Gradient</button>
-            <button id="download-gradient" class="hidden" aria-label="Download Gradient Image">Download Gradient as Image</button>
-        </div>
-        <p class="instructions">Drag and drop colors to reorder. Click on a color to edit it, or use the buttons to save or download your palette.</p>
-        <div id="color-controls">
-            <input type="text" id="new-color-hex" placeholder="Enter Hex Code (e.g., #ffffff)" aria-label="Enter Hex Code">
-            <button id="add-color" aria-label="Add New Color">Add Color</button>
-        </div>
-        <div id="gradient-preview" class="hidden">
-            <h2>Generated Gradient</h2>
-            <canvas id="gradient-canvas"></canvas>
-        </div>
-    </main>
-    <footer></footer>
-    <script src="static/app.js"></script>
+  <header>
+    <h1>Color Palette Generator</h1>
+    <button id="toggle-dark-mode" class="btn-secondary">Toggle Dark Mode</button>
+  </header>
+
+  <main class="container">
+    <!-- Palette container -->
+    <div id="palette-container"></div>
+
+    <div class="controls">
+      <button id="generate-palette" class="btn-primary">Generate Random Palette</button>
+      <button id="download-palette" class="btn-secondary">Download Palette</button>
+      <button id="generate-gradient" class="btn-primary">Generate Gradient</button>
+      <button id="download-gradient" class="btn-secondary hidden">Download Gradient</button>
+      <button id="copy-all-colors" class="btn-primary">Copy All Colors</button>
+      <button id="export-css" class="btn-secondary">Export CSS</button>
+      <button id="export-sass" class="btn-secondary">Export SASS</button>
+      <button id="export-json" class="btn-secondary">Export JSON</button>
+      <button id="export-svg" class="btn-secondary">Export SVG</button>
+    </div>
+
+    <div id="color-controls">
+      <input type="text" id="new-color-hex" placeholder="Enter Hex Code (e.g., #ffffff)" />
+      <button id="add-color" class="btn-primary">Add Color</button>
+    </div>
+
+    <div id="gradient-preview" class="hidden">
+      <h2>Gradient</h2>
+      <canvas id="gradient-canvas"></canvas>
+    </div>
+
+    <div id="lorem-generator">
+      <h2>Generate Lorem Ipsum</h2>
+      <input type="number" id="lorem-paragraphs" min="1" max="10" value="3" />
+      <button id="generate-lorem-text" class="btn-primary">Generate</button>
+      <textarea id="lorem-output" readonly></textarea>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Color Palette Generator</p>
+  </footer>
+
+  <script src="static/app.js"></script>
 </body>
 </html>
