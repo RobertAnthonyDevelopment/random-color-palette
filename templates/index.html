@@ -1,59 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Professional Color Palette Generator" />
-  <title>Color Palette Generator</title>
-  <link rel="stylesheet" href="static/styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Professional Color Palette Generator with advanced features">
+  <title>Color Palette Generator Pro</title>
+  <link rel="stylesheet" href="static/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <header>
   <div class="header-inner">
-    <h1>Color Palette Generator</h1>
-    <button id="toggle-dark-mode">Toggle Dark Mode</button>
+    <h1>Color Palette Generator Pro</h1>
+    <button id="toggle-dark-mode" class="btn-secondary">Toggle Dark Mode</button>
   </div>
 </header>
 
-  <main class="container">
-    <!-- Palette container -->
-    <div id="palette-container"></div>
+<main class="container">
+  <!-- Notifications -->
+  <div id="notification" class="notification">
+    <p id="notification-message"></p>
+  </div>
 
-    <div class="controls">
-      <button id="generate-palette" class="btn-primary">Generate Random Palette</button>
-      <button id="download-palette" class="btn-secondary">Download Palette</button>
-      <button id="generate-gradient" class="btn-primary">Generate Gradient</button>
-      <button id="download-gradient" class="btn-secondary hidden">Download Gradient</button>
-      <button id="copy-all-colors" class="btn-primary">Copy All Colors</button>
-      <button id="export-css" class="btn-secondary">Export CSS</button>
-      <button id="export-sass" class="btn-secondary">Export SASS</button>
-      <button id="export-json" class="btn-secondary">Export JSON</button>
-      <button id="export-svg" class="btn-secondary">Export SVG</button>
-    </div>
+  <!-- Palette display -->
+  <div id="palette-container"></div>
 
-    <div id="color-controls">
-      <input type="text" id="new-color-hex" placeholder="Enter Hex Code (e.g., #ffffff)" />
-      <button id="add-color" class="btn-primary">Add Color</button>
-    </div>
+  <!-- Main controls -->
+  <div class="controls">
+    <button id="generate-palette" class="btn-primary">Generate Random Palette</button>
+    <button id="download-palette" class="btn-secondary">Download Palette</button>
+    <button id="generate-gradient" class="btn-primary">Generate Gradient</button>
+    <button id="download-gradient" class="btn-secondary hidden">Download Gradient</button>
+    <button id="copy-all-colors" class="btn-primary">Copy All Colors</button>
+    <button id="undo-action" class="btn-secondary" disabled>Undo</button>
+    <button id="redo-action" class="btn-secondary" disabled>Redo</button>
+    <button id="clear-palette" class="btn-secondary" disabled>Clear Palette</button>
+  </div>
 
-    <div id="gradient-preview" class="hidden">
-      <h2>Gradient</h2>
-      <canvas id="gradient-canvas"></canvas>
-    </div>
+  <!-- Add color -->
+  <div class="controls">
+    <input
+      type="text"
+      id="new-color-hex"
+      placeholder="Enter Hex Code (e.g., #FF5733)"
+      aria-label="Enter hex color code"
+      pattern="^#[0-9A-Fa-f]{6}$"
+    >
+    <button id="add-color" class="btn-primary">Add Color</button>
+  </div>
 
-    <div id="lorem-generator">
-      <h2>Generate Lorem Ipsum</h2>
-      <input type="number" id="lorem-paragraphs" min="1" max="10" value="3" />
+  <!-- Export options -->
+  <h2>Export Options</h2>
+  <div class="export-options">
+    <button id="export-css" class="btn-secondary">Export CSS</button>
+    <button id="export-sass" class="btn-secondary">Export SASS</button>
+    <button id="export-json" class="btn-secondary">Export JSON</button>
+    <button id="export-svg" class="btn-secondary">Export SVG</button>
+    <button id="export-tailwind" class="btn-secondary">Export Tailwind</button>
+  </div>
+
+  <!-- Gradient Preview -->
+  <div id="gradient-preview" class="hidden">
+    <h2>Gradient Preview</h2>
+    <canvas id="gradient-canvas" aria-label="Gradient preview"></canvas>
+  </div>
+
+  <!-- Lorem Ipsum Generator -->
+  <div id="lorem-generator">
+    <h2>Lorem Ipsum Generator</h2>
+    <div class="controls" style="justify-content: center;">
+      <input
+        type="number"
+        id="lorem-paragraphs"
+        min="1"
+        max="10"
+        value="3"
+        style="max-width: 80px; text-align: center;"
+      >
       <button id="generate-lorem-text" class="btn-primary">Generate</button>
-      <textarea id="lorem-output" readonly></textarea>
     </div>
-  </main>
+    <textarea
+      id="lorem-output"
+      readonly
+      aria-label="Generated lorem ipsum text"
+      placeholder="Generated text will appear here..."
+      rows="6"
+    ></textarea>
+  </div>
+</main>
 
-  <footer>
-    <p>&copy; 2025 Color Palette Generator</p>
-  </footer>
+<footer>
+  <p>&copy; 2025 Color Palette Generator Pro | <a href="#" style="color: inherit;">Documentation</a> | <a href="#" style="color: inherit;">GitHub</a></p>
+</footer>
 
-  <script src="static/app.js"></script>
+<script src="static/app.js"></script>
 </body>
 </html>
