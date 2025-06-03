@@ -47,7 +47,7 @@ Check out the live version of the application here:
 3. Use the copied hex codes in your designs or code.
 4. Use **Randomize** buttons on individual colors to quickly create new combinations.
 5. Generate **Gradients** from **Random Palettes** and download them for later use.
-6. **Export**, **CSS**, **JS**, and **Tailwind** 
+6. **Export**, **CSS**, **JSON**, **SASS**, **SVG**, and **Tailwind** 
 
 ## License
 
