@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // ---- Element refs ----
   const elements = {
     paletteContainer: document.getElementById("palette-container"),
     generatePaletteBtn: document.getElementById("generate-palette"),
@@ -27,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
     notificationMessage: document.getElementById("notification-message")
   };
 
-  // ---- App State ----
   const state = {
     colors: [],
     history: [],
@@ -35,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     isGenerating: false
   };
 
-  // ---- Utility Functions ----
+  // --- Utilities ---
   const utils = {
     showNotification: (message, duration = 2400) => {
       elements.notificationMessage.textContent = message;
@@ -44,9 +42,8 @@ document.addEventListener("DOMContentLoaded", () => {
         elements.notification.classList.remove("show");
       }, duration);
     },
-    generateRandomHex: () => {
-      return `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0")}`;
-    },
+    generateRandomHex: () =>
+      `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0")}`,
     getContrastColor: (hex) => {
       const r = parseInt(hex.slice(1, 3), 16);
       const g = parseInt(hex.slice(3, 5), 16);
@@ -63,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // ---- Core Color Actions ----
+  // --- Core Color Actions ---
   const colorFunctions = {
     generatePalette: () => {
       state.colors = Array.from({ length: 5 }, utils.generateRandomHex);
@@ -169,7 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // ---- Undo/Redo & History ----
+  // --- Undo/Redo & History ---
   const stateManagement = {
     updateHistory: () => {
       state.history = state.history.slice(0, state.currentHistoryIndex + 1);
@@ -200,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // ---- Export & Utility ----
+  // --- Export & Utility ---
   const exportFunctions = {
     downloadPaletteImage: () => {
       if (state.colors.length === 0) return;
@@ -227,8 +224,11 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
       elements.gradientPreview.classList.remove("hidden");
-      elements.gradientCanvas.width = 800;
-      elements.gradientCanvas.height = 100;
+
+      // Responsive canvas width based on parent
+      const width = elements.gradientPreview.offsetWidth - 32; // 32px for padding
+      elements.gradientCanvas.width = width > 0 ? width : 600;
+      elements.gradientCanvas.height = 60;
       const ctx = elements.gradientCanvas.getContext("2d");
       const gradient = ctx.createLinearGradient(0, 0, elements.gradientCanvas.width, 0);
 
@@ -236,6 +236,7 @@ document.addEventListener("DOMContentLoaded", () => {
         gradient.addColorStop(i / (state.colors.length - 1), color);
       });
 
+      ctx.clearRect(0, 0, elements.gradientCanvas.width, elements.gradientCanvas.height);
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, elements.gradientCanvas.width, elements.gradientCanvas.height);
       elements.downloadGradientBtn.classList.remove("hidden");
@@ -284,7 +285,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // ---- Lorem Ipsum ----
+  // --- Lorem Ipsum ---
   const loremFunctions = {
     generateLorem: async () => {
       const paragraphs = elements.loremParagraphs.value;
@@ -315,31 +316,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // ---- Render Palette ----
+  // --- Render Palette ---
   const renderPalette = () => {
     elements.paletteContainer.innerHTML = "";
     state.colors.forEach((color, index) => {
-      // Create color box
       const colorBox = document.createElement("div");
       colorBox.className = "color-box";
       colorBox.style.backgroundColor = color;
 
-      // Color hex label
       const hexLabel = document.createElement("p");
       hexLabel.textContent = color;
       hexLabel.style.color = utils.getContrastColor(color);
 
-      // Color name label
       const nameLabel = document.createElement("p");
       nameLabel.textContent = `Color ${index + 1}`;
       nameLabel.style.color = utils.getContrastColor(color);
       nameLabel.style.marginTop = "0.3rem";
 
-      // Button group
       const buttonGroup = document.createElement("div");
       buttonGroup.className = "color-btn-group";
 
-      // Copy button
+      // Copy
       const copyBtn = document.createElement("button");
       copyBtn.className = "color-btn";
       copyBtn.textContent = "Copy";
@@ -349,7 +346,7 @@ document.addEventListener("DOMContentLoaded", () => {
         colorFunctions.copyColor(color);
       };
 
-      // Randomize button
+      // Randomize
       const randomizeBtn = document.createElement("button");
       randomizeBtn.className = "color-btn";
       randomizeBtn.textContent = "Randomize";
@@ -359,7 +356,7 @@ document.addEventListener("DOMContentLoaded", () => {
         colorFunctions.randomizeColor(index);
       };
 
-      // Remove button
+      // Remove
       const removeBtn = document.createElement("button");
       removeBtn.className = "color-btn remove-btn";
       removeBtn.textContent = "Remove";
@@ -369,25 +366,20 @@ document.addEventListener("DOMContentLoaded", () => {
         colorFunctions.removeColor(index);
       };
 
-      // Add all buttons to the button group
       buttonGroup.appendChild(copyBtn);
       buttonGroup.appendChild(removeBtn);
       buttonGroup.appendChild(randomizeBtn);
 
-      // Add labels and buttons to color box
       colorBox.appendChild(hexLabel);
       colorBox.appendChild(nameLabel);
       colorBox.appendChild(buttonGroup);
 
-      // Edit on click (but not when clicking a button)
       colorBox.onclick = (e) => {
-        // Only fire if the click wasn't on a button
         if (e.target === colorBox || e.target === hexLabel || e.target === nameLabel) {
           colorFunctions.editColor(index);
         }
       };
 
-      // Add color box to palette container
       elements.paletteContainer.appendChild(colorBox);
     });
 
@@ -396,7 +388,7 @@ document.addEventListener("DOMContentLoaded", () => {
     stateManagement.updateUndoRedoButtons();
   };
 
-  // ---- Event Listeners ----
+  // --- Event Listeners ---
   const setupEventListeners = () => {
     elements.addColorBtn.addEventListener("click", colorFunctions.addColor);
     elements.generatePaletteBtn.addEventListener("click", colorFunctions.generatePalette);
@@ -423,7 +415,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 300));
   };
 
-  // ---- Dark Mode ----
+  // --- Dark Mode ---
   const toggleDarkMode = () => {
     document.body.classList.toggle("dark-mode");
     const isDark = document.body.classList.contains("dark-mode");
@@ -431,7 +423,7 @@ document.addEventListener("DOMContentLoaded", () => {
     utils.showNotification(`Dark mode ${isDark ? "enabled" : "disabled"}`);
   };
 
-  // ---- Init ----
+  // --- Init ---
   const init = () => {
     if (localStorage.getItem("darkMode") === "true") {
       document.body.classList.add("dark-mode");
